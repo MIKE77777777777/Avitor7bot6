@@ -2,120 +2,132 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Aviator Predictor</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); /* fondo degradado azul */
-      color: white;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
+      color: white;
     }
 
-    .header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .header img {
-      width: 50px;
-      height: 50px;
+    .airplane {
+      width: 60px;
+      height: auto;
       margin-bottom: 10px;
+      transition: transform 1s ease;
     }
 
     h1 {
-      font-size: 2rem;
+      font-size: 2.5em;
       margin: 0;
+      font-weight: bold;
     }
 
-    #circle {
+    .circle {
       width: 200px;
       height: 200px;
       border-radius: 50%;
-      border: 5px solid white;
+      background-color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2rem;
+      font-size: 1.5em;
       font-weight: bold;
+      color: #333;
+      margin: 30px 0;
+      transition: transform 0.6s ease;
+    }
+
+    .input-box {
       margin-bottom: 20px;
-      transition: transform 0.8s ease;
     }
 
-    .spin {
-      transform: rotate(360deg);
-    }
-
-    input {
+    input[type="text"] {
       padding: 10px;
-      width: 260px;
-      margin-bottom: 10px;
-      border-radius: 5px;
+      font-size: 1em;
       border: none;
+      border-radius: 5px;
+      width: 250px;
     }
 
     button {
-      padding: 10px 30px;
-      font-size: 1rem;
+      padding: 12px 30px;
+      background-color: #ff0033;
       border: none;
       border-radius: 5px;
-      background-color: #ffffff;
-      color: #000;
+      color: white;
+      font-size: 1em;
       cursor: pointer;
-      font-weight: bold;
     }
 
     button:hover {
-      background-color: #dddddd;
+      background-color: #e60029;
     }
   </style>
 </head>
 <body>
+  <img id="plane" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Aviator_game_logo.svg/1280px-Aviator_game_logo.svg.png" alt="plane" class="airplane">
+  <h1>Aviator Predictor</h1>
 
-  <div class="header">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Airplane_silhouette.png" alt="Avión" />
-    <h1>Aviator Predictor</h1>
+  <div class="input-box">
+    <input type="text" id="inputValues" placeholder="Ingresa 3 a 5 resultados separados por coma">
   </div>
 
-  <input type="text" id="userInput" placeholder="Ingresa de 3 a 5 resultados separados por coma" />
-  <div id="circle">---</div>
-  <button onclick="predict()">Next</button>
+  <div class="circle" id="predictionDisplay">?</div>
+  <button onclick="generatePrediction()">Next</button>
 
   <script>
-    function predict() {
-      const input = document.getElementById('userInput').value.trim();
-      const results = input.split(',').map(item => item.trim()).filter(item => item !== '');
+    function rotateCircle() {
+      const circle = document.getElementById("predictionDisplay");
+      circle.style.transform = "rotate(360deg)";
+      setTimeout(() => {
+        circle.style.transform = "rotate(0deg)";
+      }, 600);
+    }
+
+    function flyPlane() {
+      const plane = document.getElementById("plane");
+      plane.style.transform = "translateY(-20px)";
+      setTimeout(() => {
+        plane.style.transform = "translateY(0px)";
+      }, 1000);
+    }
+
+    function generatePrediction() {
+      const input = document.getElementById("inputValues").value;
+      const display = document.getElementById("predictionDisplay");
+
+      const values = input.split(",").map(v => parseFloat(v.trim())).filter(v => !isNaN(v));
       
-      if (results.length < 3 || results.length > 5) {
-        alert('Por favor ingresa entre 3 y 5 resultados separados por coma.');
+      if (values.length < 3 || values.length > 5) {
+        display.textContent = "Ingresa de 3 a 5 valores";
         return;
       }
 
-      const prediction = generatePrediction(results);
-      const circle = document.getElementById('circle');
-      
-      // animación de rotación
-      circle.classList.remove('spin');
-      void circle.offsetWidth; // reiniciar animación
-      circle.classList.add('spin');
+      rotateCircle();
+      flyPlane();
 
+      // Lógica sencilla de predicción basada en promedio ponderado
+      let sum = 0;
+      let totalWeight = 0;
+      for (let i = 0; i < values.length; i++) {
+        const weight = i + 1;
+        sum += values[i] * weight;
+        totalWeight += weight;
+      }
+
+      const prediction = (sum / totalWeight).toFixed(2);
       setTimeout(() => {
-        circle.textContent = prediction;
-      }, 500);
-    }
-
-    function generatePrediction(data) {
-      // Aquí puede ir una lógica más avanzada. Por ahora, muestra aleatorio:
-      const random = (Math.random() * 10).toFixed(2);
-      return random + "x";
+        display.textContent = prediction + "x";
+      }, 600);
     }
   </script>
 </body>
