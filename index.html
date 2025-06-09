@@ -7,78 +7,99 @@
   <style>
     body {
       margin: 0;
-      padding: 0;
-      background: linear-gradient(to right, #001f3f, #0074D9);
       font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #007bff, #00c6ff);
       color: white;
+      text-align: center;
+      height: 100vh;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      flex-direction: column;
     }
 
-    h1 {
-      font-size: 2.5em;
-      margin-bottom: 20px;
-    }
-
-    .prediction-circle {
+    .predictor-container {
+      background: white;
+      color: black;
+      border-radius: 50%;
       width: 200px;
       height: 200px;
-      border-radius: 50%;
-      background-color: white;
-      color: #001f3f;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 2em;
+      font-size: 24px;
       font-weight: bold;
-      animation: pulse 1.5s infinite;
+      margin-bottom: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     }
 
-    @keyframes pulse {
-      0% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
-      }
-      70% {
-        transform: scale(1.05);
-        box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
-      }
-      100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-      }
+    .title {
+      font-size: 28px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .airplane-icon {
+      font-size: 40px;
+      margin-bottom: 5px;
+    }
+
+    input {
+      padding: 8px;
+      width: 300px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      margin-top: 15px;
+      margin-bottom: 10px;
     }
 
     button {
-      margin-top: 30px;
-      padding: 15px 30px;
-      font-size: 1.2em;
-      background-color: #0074D9;
-      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
       border: none;
-      border-radius: 10px;
+      border-radius: 5px;
+      background-color: white;
+      color: black;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      font-weight: bold;
+      transition: 0.3s ease;
     }
 
     button:hover {
-      background-color: #005fa3;
+      background-color: #f0f0f0;
     }
   </style>
 </head>
 <body>
-  <h1>Aviator Predictor</h1>
-  <div class="prediction-circle" id="prediction">3.27x</div>
-  <button onclick="nextPrediction()">Next</button>
+
+  <div class="airplane-icon">✈️</div>
+  <div class="title">Aviator Predictor</div>
+
+  <input type="text" id="userInput" placeholder="Ej: 1.2, 2.4, 3.8" />
+
+  <div class="predictor-container" id="resultado">--</div>
+
+  <button onclick="predecir()">Next</button>
 
   <script>
-    function nextPrediction() {
-      const random = (Math.random() * (100 - 1) + 1).toFixed(2);
-      document.getElementById("prediction").innerText = random + "x";
+    function predecir() {
+      const input = document.getElementById("userInput").value.trim();
+      const datos = input.split(',').map(num => parseFloat(num.trim())).filter(num => !isNaN(num));
+
+      if (datos.length < 3 || datos.length > 5) {
+        alert("Por favor ingresa entre 3 y 5 valores separados por comas.");
+        return;
+      }
+
+      // Simulación de predicción: Promedio + algo aleatorio
+      const promedio = datos.reduce((a, b) => a + b, 0) / datos.length;
+      const aleatorio = Math.random() * 0.5 + 0.1;
+      const prediccion = (promedio + aleatorio).toFixed(2);
+
+      document.getElementById("resultado").textContent = prediccion + "x";
     }
   </script>
+
 </body>
 </html>
