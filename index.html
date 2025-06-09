@@ -2,104 +2,121 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aviator Predictor</title>
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom right, #007bff, #00c6ff);
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); /* fondo degradado azul */
       color: white;
-      text-align: center;
-      height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
 
-    .predictor-container {
-      background: white;
-      color: black;
-      border-radius: 50%;
-      width: 200px;
-      height: 200px;
+    .header {
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      font-size: 24px;
-      font-weight: bold;
       margin-bottom: 20px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     }
 
-    .title {
-      font-size: 28px;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-
-    .airplane-icon {
-      font-size: 40px;
-      margin-bottom: 5px;
-    }
-
-    input {
-      padding: 8px;
-      width: 300px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: none;
-      margin-top: 15px;
+    .header img {
+      width: 50px;
+      height: 50px;
       margin-bottom: 10px;
     }
 
+    h1 {
+      font-size: 2rem;
+      margin: 0;
+    }
+
+    #circle {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 5px solid white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      transition: transform 0.8s ease;
+    }
+
+    .spin {
+      transform: rotate(360deg);
+    }
+
+    input {
+      padding: 10px;
+      width: 260px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: none;
+    }
+
     button {
-      padding: 10px 20px;
-      font-size: 16px;
+      padding: 10px 30px;
+      font-size: 1rem;
       border: none;
       border-radius: 5px;
-      background-color: white;
-      color: black;
+      background-color: #ffffff;
+      color: #000;
       cursor: pointer;
       font-weight: bold;
-      transition: 0.3s ease;
     }
 
     button:hover {
-      background-color: #f0f0f0;
+      background-color: #dddddd;
     }
   </style>
 </head>
 <body>
 
-  <div class="airplane-icon">✈️</div>
-  <div class="title">Aviator Predictor</div>
+  <div class="header">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Airplane_silhouette.png" alt="Avión" />
+    <h1>Aviator Predictor</h1>
+  </div>
 
-  <input type="text" id="userInput" placeholder="Ej: 1.2, 2.4, 3.8" />
-
-  <div class="predictor-container" id="resultado">--</div>
-
-  <button onclick="predecir()">Next</button>
+  <input type="text" id="userInput" placeholder="Ingresa de 3 a 5 resultados separados por coma" />
+  <div id="circle">---</div>
+  <button onclick="predict()">Next</button>
 
   <script>
-    function predecir() {
-      const input = document.getElementById("userInput").value.trim();
-      const datos = input.split(',').map(num => parseFloat(num.trim())).filter(num => !isNaN(num));
-
-      if (datos.length < 3 || datos.length > 5) {
-        alert("Por favor ingresa entre 3 y 5 valores separados por comas.");
+    function predict() {
+      const input = document.getElementById('userInput').value.trim();
+      const results = input.split(',').map(item => item.trim()).filter(item => item !== '');
+      
+      if (results.length < 3 || results.length > 5) {
+        alert('Por favor ingresa entre 3 y 5 resultados separados por coma.');
         return;
       }
 
-      // Simulación de predicción: Promedio + algo aleatorio
-      const promedio = datos.reduce((a, b) => a + b, 0) / datos.length;
-      const aleatorio = Math.random() * 0.5 + 0.1;
-      const prediccion = (promedio + aleatorio).toFixed(2);
+      const prediction = generatePrediction(results);
+      const circle = document.getElementById('circle');
+      
+      // animación de rotación
+      circle.classList.remove('spin');
+      void circle.offsetWidth; // reiniciar animación
+      circle.classList.add('spin');
 
-      document.getElementById("resultado").textContent = prediccion + "x";
+      setTimeout(() => {
+        circle.textContent = prediction;
+      }, 500);
+    }
+
+    function generatePrediction(data) {
+      // Aquí puede ir una lógica más avanzada. Por ahora, muestra aleatorio:
+      const random = (Math.random() * 10).toFixed(2);
+      return random + "x";
     }
   </script>
-
 </body>
 </html>
