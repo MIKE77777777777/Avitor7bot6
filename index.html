@@ -33,24 +33,19 @@
       font-weight: bold;
     }
 
-    #circle {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  background-color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  font-weight: bold;
-  color: black;
-  position: relative;
-  animation: rotate 2s linear infinite;
-  box-shadow: 
-    0 0 20px 5px #ff6600,
-    0 0 40px 10px #ff3300,
-    0 0 60px 15px #ff0000;
-  transition: all 0.3s ease;
+    .circle {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #333;
+      margin: 30px 0;
+      transition: transform 0.6s ease;
     }
 
     .input-box {
@@ -88,7 +83,7 @@
     <input type="text" id="inputValues" placeholder="Ingresa 3 a 5 resultados separados por coma">
   </div>
 
-  <div id="circle">?</div>
+  <div class="circle" id="predictionDisplay">?</div>
   <button onclick="generatePrediction()">Next</button>
 
   <script>
@@ -110,7 +105,7 @@
 
     function generatePrediction() {
       const input = document.getElementById("inputValues").value;
-      const display = document.getElementById("circle");
+      const display = document.getElementById("predictionDisplay");
 
       const values = input.split(",").map(v => parseFloat(v.trim())).filter(v => !isNaN(v));
       
