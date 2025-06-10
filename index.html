@@ -88,7 +88,7 @@
     <input type="text" id="inputValues" placeholder="Ingresa 3 a 5 resultados separados por coma">
   </div>
 
-  <div class="circle" id="predictionDisplay">?</div>
+  <div id="circle">?</div>
   <button onclick="generatePrediction()">Next</button>
 
   <script>
@@ -110,7 +110,7 @@
 
     function generatePrediction() {
       const input = document.getElementById("inputValues").value;
-      const display = document.getElementById("predictionDisplay");
+      const display = document.getElementById("circle");
 
       const values = input.split(",").map(v => parseFloat(v.trim())).filter(v => !isNaN(v));
       
